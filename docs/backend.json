@@ -1,0 +1,77 @@
+
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "role": { "type": "string", "enum": ["athlete", "scout", "club", "admin"] },
+        "isEmailVerified": { "type": "boolean" },
+        "profileCompleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "AdminProfile": {
+      "title": "Admin Profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "department": { "type": "string" },
+        "accessLevel": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "VerificationRequest": {
+      "title": "Verification Request",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "targetUid": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["scout", "club"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "requestedAt": { "type": "string", "format": "date-time" },
+        "processedAt": { "type": "string", "format": "date-time" },
+        "processedBy": { "type": "string" }
+      }
+    },
+    "Report": {
+      "title": "Misconduct Report",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reportedBy": { "type": "string" },
+        "targetId": { "type": "string", "description": "The ID of the connection or entity being reported." },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "reviewed", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "SupportThread": {
+      "title": "Support Thread",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "adminId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "closed"] },
+        "lastMessage": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "auth": { "providers": ["password", "google.com"] },
+  "firestore": {
+    "structure": [
+      { "path": "/users/{userId}", "definition": { "schema": { "$ref": "#/entities/UserAccount" }, "description": "Global user accounts." } },
+      { "path": "/admins/{adminId}", "definition": { "schema": { "$ref": "#/entities/AdminProfile" }, "description": "Admin department data." } },
+      { "path": "/verification_requests/{requestId}", "definition": { "schema": { "$ref": "#/entities/VerificationRequest" }, "description": "Pending professional verifications." } },
+      { "path": "/reports/{reportId}", "definition": { "schema": { "$ref": "#/entities/Report" }, "description": "Centralized misconduct reports." } },
+      { "path": "/support_threads/{threadId}", "definition": { "schema": { "$ref": "#/entities/SupportThread" }, "description": "1-to-1 admin support chats." } },
+      { "path": "/support_threads/{threadId}/messages/{msgId}", "definition": { "schema": { "title": "Support Message", "type": "object", "properties": { "senderId": { "type": "string" }, "content": { "type": "string" }, "timestamp": { "type": "string" } } }, "description": "Support messages." } }
+    ]
+  }
+}
