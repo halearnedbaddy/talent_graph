@@ -10,10 +10,14 @@ const inter = Inter({
   variable: '--font-sans',
 });
 
+// Updated metadata with your Google Search Console verification code
 export const metadata: Metadata = {
   title: 'Verve & Vigor - The Talent Graph',
   description:
     'Your professional identity in sports. Verified data, structured profiles, and long-term performance tracking.',
+  verification: {
+    google: 'd90b589de29c6d38', 
+  },
 };
 
 export default function RootLayout({
